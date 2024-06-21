@@ -1,4 +1,5 @@
-import CardMovie from '../Components/CardMovie';
+import CardMovie from '../Components/CardMovies/CardMovie';
+import Dialog from '../Components/DialogMovie';
 import image from '/logo.svg';
 
 const Home = () => {
@@ -25,7 +26,9 @@ const Home = () => {
       </div>
       <div className='pl-6 pt-4'>
 
-      <CardMovie/>
+      
+      <Dialog/>
+      
       </div>
     </>
   );

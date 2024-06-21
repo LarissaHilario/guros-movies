@@ -1,0 +1,6 @@
+const CardMovieList = ()=>{
+    return(
+        <>
+        </>
+    )
+}
