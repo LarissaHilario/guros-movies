@@ -7,7 +7,7 @@ const config: Config = {
   
   extend: {
     fontFamily: {
-      overpass: ['Overpass Mono', 'monospace', 'sans-serif'],
+      overpass: ['Karla', 'sans-serif'],
     },
     maxHeight: {
       128: '48rem',

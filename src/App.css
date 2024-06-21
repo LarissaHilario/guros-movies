@@ -1,3 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
 @tailwind base;
+@layer base{
+  html {
+  font-family: 'Karla';
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+}
+}
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
 @tailwind components;
 @tailwind utilities;
