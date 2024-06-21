@@ -1,10 +1,22 @@
 
 import star from '/star.svg';
 
-const CardMovie = ({ranking = "", movie= "",title = "", number= "", about= "", categorie1="", categorie2="", categorie3="" }) => {
+interface CardMovieProps {
+    ranking: string;
+    movie: string;
+    title: string;
+    number: string;
+    about: string;
+    categorie1: string;
+    categorie2: string;
+    categorie3: string;
+    onClick: () => void;
+}
+
+const CardMovie:  React.FC<CardMovieProps> = ({ranking, movie,title, number, about, categorie1, categorie2, categorie3, onClick }) => {
     return (
         <>
-            <div className="max-w-sm md:max-w-full rounded overflow-hidden shadow-lg w-[335px] md:w-[985px] h-auto md:h-[275px] md:flex md:flex-row-reverse md:justify-between">
+            <div onClick={onClick} className= " max-w-sm md:max-w-full rounded overflow-hidden shadow-lg w-[335px] md:w-[985px] h-auto md:h-[275px] md:flex md:flex-row-reverse md:justify-between">
                 <div className="relative w-[335px] h-[275px] md:w-[275px] md:flex-shrink-0">
                     <img className="w-full h-full object-cover opacity-95" src={movie} alt="Movie" />
                     <div className='absolute bottom-1 md:bottom-3 right-10 md:right-[330px] text-2xl font-bold text-white md:text-[#5C7284]'>

@@ -5,14 +5,14 @@ import close from '/close-button.svg';
 import StarRating from './StartRating';
 
 
-const Dialog = () => {
+const Dialog = ({onClose} : { onClose: () => void }) => {
     const [rating, setRating] = useState(0);
 
     return (
-        <div className="flex flex-col md:flex-row w-[375px] md:w-[1280px] h-[874px] md:h-[600px] bg-white">
+        <div className="flex flex-col md:flex-row w-full md:w-[1280px] h-[874px] md:h-[600px] bg-white overflow-y-auto">
             <div className="relative w-full h-[351px] md:w-full md:h-full md:basis-1/4">
                 <img src={imgCard} alt="img-card" className='h-full w-full object-cover ' />
-                <button className=' absolute top-2 pl-2'>
+                <button onClick={onClose} className=' absolute top-4 pl-4'>
                     <img src={close} alt="close-button" />
                 </button>
                 <div className='absolute bottom-2 right-10 md:right-12 text-2xl font-bold text-black text-opacity-100'>
