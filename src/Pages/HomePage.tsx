@@ -6,14 +6,14 @@ const Home = () => {
   return (
     <>
       <div className="flex w-full overflow-hidden">
-        <div className="grid h-10 md:h-20 mt-10 ml-6 flex-grow place-items-start">
+        <div className="grid h-10 md:h-12 mt-10 ml-6 flex-grow place-items-start">
           <div className="navbar">
-            <img className="image  w-20 md:w-40" src={image}  />
+            <img className="image  w-20 md:w-38" src={image}  />
           </div>
         </div>
       </div>
 
-      <div className="flex w-full mt-0 md:mt-5"> 
+      <div className="flex w-full "> 
         <div className="grid bg-neutral w-full h-full">
           <div className="flex text-lg md:text-2xl font-bold pl-6 pr-12"> 
             Top movies en Guros
@@ -27,9 +27,10 @@ const Home = () => {
       <div className='pl-6 pt-4'>
 
       
-      <Dialog/>
+     
       
-      </div>
+      </div> 
+      <Dialog/>
     </>
   );
 }
