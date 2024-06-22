@@ -1,57 +1,43 @@
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import CardMovie from './CardMovie';
+import { chargingAllData } from '../../Router/Thunks/allDataThunk';
+import { fetchGenres } from '../../Router/Slices/allDataSlice';
+import { RootState, AppDispatch } from '../../Router/store';
 
 const CardMovieList = ({ openDialog }: { openDialog: (movie: any) => void }) => {
-  const [movies, setMovies] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [genres, setGenres] = useState<any[]>([]);
+  const [randomMoviesByPage, setRandomMoviesByPage] = useState<{ [key: number]: any[] }>({});
+  const dispatch = useDispatch<AppDispatch>();
+  const movies = useSelector((state: RootState) => state.allData.allData || []);
+  const genres = useSelector((state: RootState) => state.allData.genres || []);
+  const totalPages = useSelector((state: RootState) => state.allData.totalPages);
 
   useEffect(() => {
-    fetchGenres();
-    fetchMovies();
-  }, [currentPage]);
+    dispatch(fetchGenres());
+    dispatch(chargingAllData(currentPage));
+  }, [dispatch, currentPage]);
 
- 
-
-  const fetchMovies = async () => {
-    try {
-      const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&page=${currentPage}`);
-      if (response.ok) {
-        const data = await response.json();
-        const totalPages = data.total_pages;
-        setTotalPages(totalPages);
-        const randomMovies = getRandomMovies(data.results, 5);
-        setMovies(randomMovies);
-      } else {
-        throw new Error('Error al obtener las películas');
-      }
-    } catch (error) {
-      console.error('Error:', error);
+  useEffect(() => {
+    if (movies.length > 0 && !randomMoviesByPage[currentPage]) {
+      generateRandomMovies(currentPage);
     }
-  };
+  }, [movies, randomMoviesByPage, currentPage]);
 
-  const fetchGenres = async () => {
-    try {
-      const response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}`);
-      if (response.ok) {
-        const data = await response.json();
-        setGenres(data.genres);
-      } else {
-        throw new Error('Error al obtener los géneros');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  const getRandomMovies = (movies: any[], count: number) => {
-    const shuffled = movies.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+  const generateRandomMovies = (page: number) => {
+    const shuffled = [...movies].sort(() => 0.5 - Math.random());
+    const random = shuffled.slice(0, 5);
+    setRandomMoviesByPage(prevState => ({
+      ...prevState,
+      [page]: random
+    }));
   };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    if (!randomMoviesByPage[page]) {
+      dispatch(chargingAllData(page)); 
+    }
   };
 
   const handleCardClick = (movie: any) => {
@@ -63,9 +49,15 @@ const CardMovieList = ({ openDialog }: { openDialog: (movie: any) => void }) => 
     return genre ? genre.name : 'Other';
   }
 
+  if (!movies || movies.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  const currentRandomMovies = randomMoviesByPage[currentPage] || [];
+
   return (
     <div className="">
-      {movies.map((movie) => (
+      {currentRandomMovies.map((movie) => (
         <div key={movie.id} className="">
           <CardMovie
             ranking={movie.vote_average}

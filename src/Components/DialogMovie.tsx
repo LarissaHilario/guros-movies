@@ -1,38 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import imgCard from '/spider.png';
+import  { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import star from '/star.svg';
 import close from '/close-button.svg';
+
+import { fetchGenres } from '../Router/Slices/allDataSlice';
+import { RootState, AppDispatch } from '../Router/store';
 import StarRating from './StartRating';
 
 const Dialog = ({ onClose, movie }: { onClose: () => void; movie: any }) => {
   const [rating, setRating] = useState(0);
-  const [genres, setGenres] = useState<any[]>([]);
-  
+  const dispatch = useDispatch<AppDispatch>();
+  const genres = useSelector((state: RootState) => state.allData.genres);
+
+  useEffect(() => {
+    dispatch(fetchGenres());
+  }, [dispatch]);
+
   function getGenreName(genreId: number) {
-    const genre = genres.find((genre) => genre.id === genreId);
+    const genre = genres.find((genre: any) => genre.id === genreId);
     return genre ? genre.name : 'Other';
   }
-  const fetchGenres = async () => {
-    try {
-      const response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}`);
-      if (response.ok) {
-        const data = await response.json();
-        setGenres(data.genres);
-      } else {
-        throw new Error('Error al obtener los géneros');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-  useEffect(() => {
-    fetchGenres();
-   
-  }, );
-
 
   return (
-    <div className="flex flex-col md:flex-row w-full  h-[874px] md:h-[600px] bg-white overflow-y-auto md:ov erflow-hidden">
+    <div className="flex flex-col md:flex-row w-full h-[874px] md:h-[600px] bg-white overflow-y-auto md:overflow-hidden">
       <div className="relative w-full h-[351px] md:w-full md:h-full md:basis-1/4">
         <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt="img-card" className="h-full w-full object-cover" />
         <button onClick={onClose} className="absolute top-4 pl-4">
@@ -69,8 +60,6 @@ const Dialog = ({ onClose, movie }: { onClose: () => void; movie: any }) => {
       </div>
     </div>
   );
-
-
 };
 
 export default Dialog;
