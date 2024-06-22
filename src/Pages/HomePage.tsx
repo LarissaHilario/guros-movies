@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
-import CardMovie from '../Components/CardMovies/CardMovie';
+
 import Dialog from '../Components/DialogMovie';
 import image from '/logo.svg';
+import CardMovieList from '../Components/CardMovies/CardMoviesList';
 
 const Home = () => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [selectedMovie, setSelectedMovie] = useState<any>(null);
 
-  const openDialog = () => {
+  const openDialog = (movie: any) => {
+    setSelectedMovie(movie);
     setIsDialogOpen(true);
   };
 
   const closeDialog = () => {
+    setSelectedMovie(null);
     setIsDialogOpen(false);
   };
 
@@ -35,25 +39,17 @@ const Home = () => {
         </div>
       </div>
 
-      <div className={`flex pl-6 pt-4 w-full ${isDialogOpen ? 'blur-sm' : ''}`}>
-        <CardMovie
-          ranking="8.6"
-          movie="/path/to/movie-image.jpg"
-          title="Spider-Man: Across the Spider-Verse"
-          number="924482"
-          about="Pirate ipsum arrgh bounty warp jack. Gar spot run blimey hearties..."
-          categorie1="Animación"
-          categorie2="Acción"
-          categorie3="Aventura"
-          onClick={openDialog}
-        />
+      
+      <div className={`flex  w-full ${isDialogOpen ? 'blur-sm' : ''}`}>
+        <CardMovieList openDialog={openDialog} />
       </div>
 
+      
       {isDialogOpen && (
         <>
           <div className="fixed inset-0 bg-black opacity-85 z-40" onClick={closeDialog}></div>
-          <div className="fixed inset-0 flex top-1/3 md:top-[44%] z-50 overflow-auto md:overflow-hidden">
-            <Dialog onClose={closeDialog} />
+          <div className="fixed inset-0 flex top-1/3 md:top-[43%] z-50 overflow-auto">
+          <Dialog onClose={closeDialog} movie={selectedMovie} />
           </div>
         </>
       )}
